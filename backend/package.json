@@ -1,0 +1,17 @@
+{
+  "name": "backend-app",
+  "version": "1.0.0",
+  "description": "MERN stack challenge",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mern",
+    "js",
+    "node",
+    "mongodb"
+  ],
+  "author": "abhishekkhanna1995@gmail.com",
+  "license": "ISC"
+}

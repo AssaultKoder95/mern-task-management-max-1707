@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { createError } from "./error.js";
+import createError from "./error.js";
 
 export const checkAuth = (req, res, next) => {
   const token = req.cookies.access_token;
@@ -11,9 +11,8 @@ export const checkAuth = (req, res, next) => {
       return next(
         createError({ status: 401, message: "Unauthorized, invalid token" })
       );
-    } else {
-      req.user = decoded;
-      next();
     }
+    req.user = decoded;
+    next();
   });
 };

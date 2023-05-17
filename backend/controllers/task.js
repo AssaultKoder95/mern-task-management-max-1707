@@ -1,7 +1,7 @@
 import Task from "../models/Task.js";
 import Reminder from "../models/Reminder.js";
 import TaskHistory from "../models/TaskHistory.js";
-import { createError } from "../utils/error.js";
+import createError from "../utils/error.js";
 
 export const createTask = async (req, res, next) => {
   const { title, dueDate, description } = req.body;

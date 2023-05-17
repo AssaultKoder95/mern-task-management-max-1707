@@ -41,7 +41,6 @@ export const login = async (req, res, next) => {
     return res
       .cookie("access_token", token, {
         httpOnly: true,
-        sameSite: "none",
         secure: process.env.NODE_ENV === "production",
       })
       .status(200)
@@ -85,6 +84,8 @@ export const logout = async (req, res) => {
 
 export const isLoggedIn = async (req, res) => {
   const token = req.cookies.access_token;
+  console.log(req.cookies);
+
   if (!token) {
     return res.json(false);
   }
@@ -96,9 +97,5 @@ export const isLoggedIn = async (req, res) => {
   });
 };
 
-export const resetPassword = async (req, res) => {
-  return res.json({ status: "OK" });
-};
-export const updatePassword = async (req, res) => {
-  return res.json({ status: "OK" });
-};
+export const resetPassword = async (req, res) => res.json({ status: "OK" });
+export const updatePassword = async (req, res) => res.json({ status: "OK" });

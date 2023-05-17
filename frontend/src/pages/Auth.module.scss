@@ -1,0 +1,19 @@
+.form_container {
+  display: flex;
+  gap: 2rem;
+  padding-top: 100px;
+  @media only screen and (max-width: 768px) {
+    flex-direction: column;
+    padding-top: 20px;
+
+    p {
+      text-align: center;
+      padding-top: 0px !important;
+    }
+  }
+
+  p {
+    font-size: 3rem;
+    padding-top: 150px;
+  }
+}

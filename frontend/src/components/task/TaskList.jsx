@@ -2,10 +2,12 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 
+import InfiniteScroll from 'react-infinite-scroll-component';
 import TaskItem from './TaskItem';
 import HistoryModal from './HistoryModal';
 import AddEditTaskModal from './AddEditTaskModal';
 import classes from './TaskList.module.scss';
+import SearchBar from './SearchBar';
 
 function TaskList() {
   const [taskList, setTaskList] = useState([]);
@@ -14,6 +16,8 @@ function TaskList() {
   const [newTask, setNewTask] = useState({});
   const [taskHistory, setTaskHistory] = useState([]);
   const [existingTask, setExistingTask] = useState({});
+  const [keyword, setKeyword] = useState('');
+  const [filteredTaskList, setFilteredTaskList] = useState([]);
 
   const getTasks = async () => {
     try {
@@ -21,6 +25,7 @@ function TaskList() {
       setTaskList(
         data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
       );
+      setFilteredTaskList(data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
     } catch (err) {
       console.log(err);
     }
@@ -114,6 +119,14 @@ function TaskList() {
     setNewTask({ ...newTask, [e.target.name]: e.target.value, });
   };
 
+  const updateKeyword = (searchText) => {
+    const filtered = taskList.filter((task) => task.title.includes(searchText)
+      || task.status.includes(searchText)
+      || task.description.includes(searchText));
+    setKeyword(searchText);
+    setFilteredTaskList(filtered);
+  };
+
   return (
     <div>
       <div className={classes.topBar}>
@@ -126,10 +139,26 @@ function TaskList() {
         </button>
       </div>
 
-      {taskList.length > 0 ? (
+      {/* <InfiniteScroll
+        dataLength={items.length} // This is important field to render the next data
+        next={fetchData}
+        hasMore
+        loader={<h4>Loading...</h4>}
+        endMessage={(
+          <p style={{ textAlign: 'center' }}>
+            <b>Yay! You have seen it all</b>
+          </p>
+        )}
+      >
+        {items}
+      </InfiniteScroll> */}
+
+      <SearchBar keyword={keyword} onChange={updateKeyword} />
+
+      {filteredTaskList.length > 0 ? (
         <table className={classes.taskList_table}>
           <tbody>
-            {taskList.map((task) => (
+            {filteredTaskList.map((task) => (
               <TaskItem
                 key={task._id}
                 task={task}

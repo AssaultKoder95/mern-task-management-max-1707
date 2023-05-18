@@ -1,7 +1,12 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import moment from 'moment';
+import { BsClipboard, BsTrash, BsClockHistory } from 'react-icons/bs';
 import classes from './TaskItem.module.scss';
+
+const statusObj = {
+  todo: 'To do', inprogress: 'In progress', completed: 'Completed', rejected: 'Rejected'
+};
 
 function TaskItem({
   task, deleteTask, editTask, showTaskHistory
@@ -11,7 +16,7 @@ function TaskItem({
       <td>
         {task?.title?.length > 10 ? `${task?.title?.substring(0, 10)}...` : task?.title}
       </td>
-      <td>{task.status}</td>
+      <td>{statusObj[task?.status]}</td>
       <td>{moment(task?.createdAt).format('Do MMM YY')}</td>
       <td>
         <button
@@ -19,21 +24,21 @@ function TaskItem({
           className={classes.editBtn}
           onClick={() => editTask(task?._id)}
         >
-          Edit
+          <BsClipboard />
         </button>
         <button
           type="button"
           className={classes.historyBtn}
           onClick={() => showTaskHistory(task?._id)}
         >
-          History
+          <BsClockHistory />
         </button>
         <button
           type="button"
           className={classes.deleteBtn}
           onClick={() => deleteTask(task?._id)}
         >
-          Delete
+          <BsTrash />
         </button>
       </td>
     </tr>

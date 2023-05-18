@@ -61,7 +61,6 @@ function AddEditTaskModal({
                     <input
                         name="remindOn"
                         type="date"
-                        required
                         min={new Date().toISOString().substring(0, 10)}
                         max={task?.dueDate
                             ? new Date(task?.dueDate).toISOString().substring(0, 10)

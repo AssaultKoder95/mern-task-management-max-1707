@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
+import { BsArrowRight } from 'react-icons/bs';
 import useAuth from '../../hooks/useAuth';
 
 import classes from './AuthForm.module.scss';
@@ -64,7 +65,16 @@ function Login() {
         <br />
         <button type="submit">{isLoading ? <Spinner /> : 'Login'}</button>
 
-        <h4> Reset Password </h4>
+        <h3>
+          {' '}
+          Forgot password? reset
+          {' '}
+          {' '}
+          <Link to="/reset-password">
+            here
+            <BsArrowRight />
+          </Link>
+        </h3>
       </form>
     </div>
   );

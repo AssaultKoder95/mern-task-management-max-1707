@@ -5,7 +5,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import HistoryItem from './HistoryItem';
-import classes from './HistoryModal.module.scss';
+import classes from './Modal.module.scss';
 
 function HistoryModal({ isOpen, closeModal, list }) {
     return (

@@ -31,45 +31,6 @@
   transform: "translate(-50%, -50%)";
 }
 
-.addNewForm {
-  margin-top: 2rem;
-  width: 100%;
-  text-align: left;
-  label {
-    width: 100%;
-    font-size: 1.5rem;
-  }
-  input,
-  select {
-    font-size: 2rem;
-    width: 100%;
-    margin-bottom: 2rem;
-    margin-top: 0.5rem;
-    padding: 1rem;
-    padding-left: 0px;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid #000000;
-  }
-  input:focus,
-  select:focus {
-    outline: none;
-  }
-  button[type="submit"] {
-    background-color: #bbbbbb;
-    padding: 0.5rem 2rem;
-    font-size: 1.8rem;
-    border: none;
-    color: black;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: 0.3s ease background-color, 0.3s ease color;
-    &:hover {
-      background-color: #156542;
-      color: rgb(205, 205, 205);
-    }
-  }
-}
 .taskList_table {
   width: 100%;
   margin-top: 2rem;

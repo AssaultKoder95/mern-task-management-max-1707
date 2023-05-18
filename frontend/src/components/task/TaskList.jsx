@@ -1,18 +1,19 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import Modal from 'react-modal';
 import toast from 'react-hot-toast';
 
 import TaskItem from './TaskItem';
 import HistoryModal from './HistoryModal';
+import AddEditTaskModal from './AddEditTaskModal';
 import classes from './TaskList.module.scss';
 
 function TaskList() {
   const [taskList, setTaskList] = useState([]);
-  const [isAddingNew, setIsAddingNew] = useState(false);
+  const [isAddingNewOrEditingTask, setIsAddingNewOrEditingTask] = useState(false);
   const [isTaskHistoryModalOpen, setTaskHistoryModalOpen] = useState(false);
   const [newTask, setNewTask] = useState({});
   const [taskHistory, setTaskHistory] = useState([]);
+  const [existingTask, setExistingTask] = useState({});
 
   const getTasks = async () => {
     try {
@@ -30,7 +31,7 @@ function TaskList() {
   }, []);
 
   const addNewButtonClick = () => {
-    setIsAddingNew(!isAddingNew);
+    setIsAddingNewOrEditingTask(!isAddingNewOrEditingTask);
   };
 
   const addNewTask = async (e) => {
@@ -44,9 +45,24 @@ function TaskList() {
         ...newTask,
       });
       toast.success('New task added');
-      setIsAddingNew(false);
+      setIsAddingNewOrEditingTask(false);
       setNewTask({});
       setTaskList([{ ...data }, ...taskList]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const updateExistingTask = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.put(`/api/tasks/${existingTask[0]._id}`, {
+        ...newTask,
+      });
+      toast.success('Task updated successfully');
+      setIsAddingNewOrEditingTask(false);
+      setNewTask({});
+      setExistingTask({});
     } catch (err) {
       console.log(err);
     }
@@ -62,7 +78,14 @@ function TaskList() {
     }
   };
 
-  // const editTask = , showTaskHistory
+  const editTask = async (id) => {
+    try {
+      setExistingTask(taskList.filter((task) => task._id === id));
+      setIsAddingNewOrEditingTask(true);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const showTaskHistory = async (id) => {
     try {
@@ -75,7 +98,7 @@ function TaskList() {
   };
 
   const closeModal = () => {
-    setIsAddingNew(false);
+    setIsAddingNewOrEditingTask(false);
   };
 
   const closeTaskHistoryModal = () => {
@@ -98,57 +121,6 @@ function TaskList() {
         </button>
       </div>
 
-      <Modal
-        isOpen={isAddingNew}
-        onRequestClose={closeModal}
-        style={classes.modal}
-        contentLabel="Add Task Modal"
-      >
-        <h1>Add New Task</h1>
-        <button type="button" style={{ float: 'right' }} onClick={closeModal}>X</button>
-        <form className={classes.addNewForm} onSubmit={addNewTask}>
-          <label htmlFor="title">
-            Title:
-            <input name="title" type="text" required onChange={handleChange} />
-          </label>
-          <br />
-          <label htmlFor="description">
-            Description:
-            <input
-              name="description"
-              type="text"
-              required
-              onChange={handleChange}
-            />
-          </label>
-
-          <label htmlFor="dueDate">
-            Due Date:
-            <input
-              name="dueDate"
-              type="date"
-              required
-              min={new Date().toISOString().substring(0, 10)}
-              onChange={handleChange}
-            />
-          </label>
-
-          <label htmlFor="status">
-            Status:
-            <select name="status" onChange={handleChange}>
-              <option value="todo" label="To do" />
-              <option value="inprogress" label="In progress" />
-              <option value="completed" label="Completed" />
-              <option value="rejected" label="Rejected" />
-            </select>
-          </label>
-
-          <br />
-          <br />
-          <button type="submit">{0 ? <p /> : 'Add Task'}</button>
-        </form>
-      </Modal>
-
       {taskList.length > 0 ? (
         <table className={classes.taskList_table}>
           <tbody>
@@ -158,6 +130,7 @@ function TaskList() {
                 task={task}
                 deleteTask={deleteTask}
                 showTaskHistory={showTaskHistory}
+                editTask={editTask}
               />
             ))}
           </tbody>
@@ -165,6 +138,15 @@ function TaskList() {
       ) : (
         ''
       )}
+
+      <AddEditTaskModal
+        isOpen={isAddingNewOrEditingTask}
+        closeModal={closeModal}
+        handleChange={handleChange}
+        addNewTask={addNewTask}
+        updateExistingTask={updateExistingTask}
+        task={existingTask[0]}
+      />
 
       <HistoryModal
         isOpen={isTaskHistoryModalOpen}

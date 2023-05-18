@@ -52,9 +52,7 @@ export const updateTask = async (req, res, next) => {
     );
 
     const taskHistory = new TaskHistory({
-      changes: `updated task - ${updateTask.title}. ${Object.keys(
-        req.body
-      ).join(", ")} have been updated.`,
+      changes: `${Object.keys(req.body).join(", ")} have been updated.`,
       task: updatedTask.id,
     });
     await taskHistory.save();

@@ -67,13 +67,10 @@ npm run dev
 
 and you should be able to see something like this:
 
-```
-<INSERT IMAGE FOR TERMINAL SCREENSHOT>
-```
+<img width="787" alt="Screenshot 2023-05-18 at 7 15 52 PM" src="https://github.com/AssaultKoder95/mern-task-management-max-1707/assets/6575313/4c7459d6-e800-4cf1-8af4-318e617eed1b">
 
-```
-<INSERT THE VIDEO TUTORIAL>
-```
+https://github.com/AssaultKoder95/mern-task-management-max-1707/assets/6575313/e91488ad-8f8f-4669-b918-1a334b1896da
+
 
 ### Future Plans
 

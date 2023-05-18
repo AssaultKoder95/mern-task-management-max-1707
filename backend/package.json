@@ -10,7 +10,8 @@
     "lint": "npm run eslint \"Client/**/*.ts\"",
     "precommit": "npm run lint && npm test",
     "prepush": "npm run lint",
-    "cron": "node cron/index.js"
+    "cron": "node cron/index.js",
+    "test": "jest"
   },
   "keywords": [
     "mern",
@@ -25,7 +26,9 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.26.0",
     "husky": "^8.0.3",
-    "nodemon": "^2.0.16"
+    "jest": "^29.5.0",
+    "nodemon": "^2.0.16",
+    "supertest": "^6.3.3"
   },
   "dependencies": {
     "@sentry/node": "^7.52.1",

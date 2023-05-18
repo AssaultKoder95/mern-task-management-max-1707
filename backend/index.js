@@ -54,7 +54,7 @@ app.use(Sentry.Handlers.tracingHandler());
 app.use(
   Sentry.Handlers.errorHandler({
     shouldHandleError(error) {
-      if (error.statusCode >= 400) {
+      if (error) {
         return true;
       }
       return false;
@@ -84,3 +84,5 @@ app.listen(PORT, () => {
   connectDB();
   console.log(`Server is running on port ${PORT}`);
 });
+
+export default app;

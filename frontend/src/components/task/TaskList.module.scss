@@ -21,19 +21,39 @@
     color: rgb(205, 205, 205);
   }
 }
+
+.modal {
+  top: "50%";
+  left: "50%";
+  right: "auto";
+  bottom: "auto";
+  margin-right: "-50%";
+  transform: "translate(-50%, -50%)";
+}
+
 .addNewForm {
+  margin-top: 2rem;
   width: 100%;
-  display: flex;
-  gap: 1rem;
-  input {
+  text-align: left;
+  label {
     width: 100%;
-    padding: 0.5rem;
-    border: none;
-    border-radius: 5px;
-    font-size: 1.8rem;
-    color: black;
+    font-size: 1.5rem;
+  }
+  input,
+  select {
+    font-size: 2rem;
+    width: 100%;
+    margin-bottom: 2rem;
+    margin-top: 0.5rem;
     padding: 1rem;
-    background-color: #bbbbbb;
+    padding-left: 0px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #000000;
+  }
+  input:focus,
+  select:focus {
+    outline: none;
   }
   button[type="submit"] {
     background-color: #bbbbbb;
@@ -41,7 +61,7 @@
     font-size: 1.8rem;
     border: none;
     color: black;
-    border-radius: 6px;
+    border-radius: 50px;
     cursor: pointer;
     transition: 0.3s ease background-color, 0.3s ease color;
     &:hover {

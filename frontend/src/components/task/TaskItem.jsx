@@ -1,39 +1,33 @@
-import React, { useState } from 'react';
+/* eslint-disable react/prop-types */
+import React from 'react';
 import moment from 'moment';
-import axios from 'axios';
-import toast from 'react-hot-toast';
 import classes from './TaskItem.module.scss';
 
-function TaskItem({ task, deleteTask }) {
-  const [isCompleted, setIsCompleted] = useState(task.completed);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleCheckboxClick = async () => {
-    try {
-      setIsLoading(true);
-      await axios.put(`/api/tasks/${task._id}`, {
-        completed: !isCompleted,
-      });
-      setIsCompleted(!isCompleted);
-      toast.success('Task updated successfully');
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+function TaskItem({
+  task, deleteTask, editTask, showTaskHistory
+}) {
   return (
     <tr className={classes.task_item}>
-      <td className={classes.task_name}>
-        <div className={classes.checkbox} onClick={handleCheckboxClick}>
-          <input type="checkbox" checked={isCompleted} disabled={isLoading} />
-        </div>
-        <p>{task.title}</p>
-      </td>
-      <td>{isCompleted ? 'Complete' : 'Incomplete'}</td>
-      <td>{moment(task.createdAt).format('MMM Do YY')}</td>
       <td>
+        {task.title.length > 10 ? `${task.title.substring(0, 10)}...` : task.title}
+      </td>
+      <td>{task.status}</td>
+      <td>{moment(task.createdAt).format('Do MMM YY')}</td>
+      <td>
+        <button
+          type="button"
+          className={classes.editBtn}
+          onClick={() => editTask(task._id)}
+        >
+          Edit
+        </button>
+        <button
+          type="button"
+          className={classes.historyBtn}
+          onClick={() => showTaskHistory(task._id)}
+        >
+          History
+        </button>
         <button
           type="button"
           className={classes.deleteBtn}

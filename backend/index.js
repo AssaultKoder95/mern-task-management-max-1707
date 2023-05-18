@@ -63,13 +63,14 @@ app.use(
 );
 
 // error handler
-app.use((err, req, res) => {
+app.use((err, req, res, _) => {
   const status = err.statusCode || 500;
   const message = err.message || "Internal Server Error";
   res.status(status).json({ message });
 });
 
-const connectDB = async () => {
+// eslint-disable-next-line import/prefer-default-export
+export const connectDB = async () => {
   try {
     await mongoose.connect(process.env.DB_CONNECTION_STRING);
     console.log("MongoDB Connected");

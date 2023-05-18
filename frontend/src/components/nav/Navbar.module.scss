@@ -25,7 +25,7 @@ header {
   display: inline-block;
   background-color: crimson;
   padding: 1rem 2rem;
-  font-size: 1rem;
+  font-size: 1.4rem;
   border: none;
   color: white;
   border-radius: 50px;
@@ -40,8 +40,7 @@ header {
   display: inline-block;
   background-color: rgb(55, 193, 239);
   padding: 1rem 2rem;
-  margin-right: 1rem;
-  font-size: 1rem;
+  font-size: 1.4rem;
   border: none;
   border-radius: 50px;
   cursor: pointer;
@@ -49,4 +48,5 @@ header {
   &:hover {
     background-color: rgb(169, 216, 231);
   }
+  margin-right: 1rem;
 }

@@ -7,6 +7,7 @@ import {
   getCurrentUserTasks,
   updateTask,
   setReminder,
+  getTaskHistory,
 } from "../controllers/task.js";
 
 const router = express.Router();
@@ -20,6 +21,8 @@ router.put("/:taskId", updateTask);
 router.post("/set-reminder/:taskId", setReminder);
 
 router.get("/myTasks", getCurrentUserTasks);
+
+router.get("/:taskId/history", getTaskHistory);
 
 router.delete("/deleteAll", deleteAllTasks);
 

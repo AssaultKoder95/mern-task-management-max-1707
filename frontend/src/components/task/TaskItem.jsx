@@ -1,45 +1,44 @@
-import React, { useState } from 'react';
+/* eslint-disable react/prop-types */
+import React from 'react';
 import moment from 'moment';
-import axios from 'axios';
-import toast from 'react-hot-toast';
+import { BsClipboard, BsTrash, BsClockHistory } from 'react-icons/bs';
 import classes from './TaskItem.module.scss';
 
-function TaskItem({ task, deleteTask }) {
-  const [isCompleted, setIsCompleted] = useState(task.completed);
-  const [isLoading, setIsLoading] = useState(false);
+const statusObj = {
+  todo: 'To do', inprogress: 'In progress', completed: 'Completed', rejected: 'Rejected'
+};
 
-  const handleCheckboxClick = async () => {
-    try {
-      setIsLoading(true);
-      await axios.put(`/api/tasks/${task._id}`, {
-        completed: !isCompleted,
-      });
-      setIsCompleted(!isCompleted);
-      toast.success('Task updated successfully');
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+function TaskItem({
+  task, deleteTask, editTask, showTaskHistory
+}) {
   return (
     <tr className={classes.task_item}>
-      <td className={classes.task_name}>
-        <div className={classes.checkbox} onClick={handleCheckboxClick}>
-          <input type="checkbox" checked={isCompleted} disabled={isLoading} />
-        </div>
-        <p>{task.title}</p>
+      <td>
+        {task?.title?.length > 10 ? `${task?.title?.substring(0, 10)}...` : task?.title}
       </td>
-      <td>{isCompleted ? 'Complete' : 'Incomplete'}</td>
-      <td>{moment(task.createdAt).format('MMM Do YY')}</td>
+      <td>{statusObj[task?.status]}</td>
+      <td>{moment(task?.createdAt).format('Do MMM YY')}</td>
       <td>
         <button
           type="button"
-          className={classes.deleteBtn}
-          onClick={() => deleteTask(task._id)}
+          className={classes.editBtn}
+          onClick={() => editTask(task?._id)}
         >
-          Delete
+          <BsClipboard />
+        </button>
+        <button
+          type="button"
+          className={classes.historyBtn}
+          onClick={() => showTaskHistory(task?._id)}
+        >
+          <BsClockHistory />
+        </button>
+        <button
+          type="button"
+          className={classes.deleteBtn}
+          onClick={() => deleteTask(task?._id)}
+        >
+          <BsTrash />
         </button>
       </td>
     </tr>

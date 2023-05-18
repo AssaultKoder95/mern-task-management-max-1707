@@ -14,9 +14,9 @@ export const login = async (req, res, next) => {
   }
 
   try {
-    const user = await User.findOne({ email: req.body.email }).select(
-      "name email password"
-    );
+    const user = await User.findOne({
+      email: req.body.email.toLowerCase(),
+    }).select("name email password");
     if (!user) {
       return next(
         createError({ status: 404, message: "User not found with the email" })
@@ -66,7 +66,7 @@ export const register = async (req, res, next) => {
 
     const newUser = new User({
       name: req.body.name,
-      email: req.body.email,
+      email: req.body.email.toLowerCase(),
       password: hashedPassword,
     });
 
@@ -98,4 +98,5 @@ export const isLoggedIn = async (req, res) => {
 };
 
 export const resetPassword = async (req, res) => res.json({ status: "OK" });
+
 export const updatePassword = async (req, res) => res.json({ status: "OK" });

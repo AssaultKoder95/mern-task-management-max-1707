@@ -1,24 +1,32 @@
 import axios from 'axios';
-import React from 'react';
+import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-
+import Spinner from '../spinner/Spinner';
 import classes from './AuthForm.module.scss';
 
 function Register() {
+  const [isLoading, setLoadingState] = useState(false);
+
   const register = async (e) => {
     e.preventDefault();
+    setLoadingState(true);
+
     const user = {
       name: e.target.name.value,
       email: e.target.email.value,
       password: e.target.password.value,
     };
-    try {
-      await axios.post(`/api/auth/register`, user);
-      toast.success('Registered successfully');
-    } catch (err) {
-      console.log(err);
-      toast.error('Something went wrong');
-    }
+
+    setTimeout(async () => {
+      try {
+        await axios.post(`/api/auth/register`, user);
+        toast.success('Registered successfully');
+      } catch (err) {
+        console.log(err);
+        toast.error('Something went wrong');
+      }
+      setLoadingState(false);
+    }, 2000);
   };
 
   return (
@@ -43,7 +51,7 @@ function Register() {
           />
         </label>
         <br />
-        <button type="submit">Register</button>
+        <button type="submit">{isLoading ? <Spinner /> : 'Register'}</button>
       </form>
     </div>
   );

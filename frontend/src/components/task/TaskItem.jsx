@@ -9,29 +9,29 @@ function TaskItem({
   return (
     <tr className={classes.task_item}>
       <td>
-        {task.title.length > 10 ? `${task.title.substring(0, 10)}...` : task.title}
+        {task?.title?.length > 10 ? `${task?.title?.substring(0, 10)}...` : task?.title}
       </td>
       <td>{task.status}</td>
-      <td>{moment(task.createdAt).format('Do MMM YY')}</td>
+      <td>{moment(task?.createdAt).format('Do MMM YY')}</td>
       <td>
         <button
           type="button"
           className={classes.editBtn}
-          onClick={() => editTask(task._id)}
+          onClick={() => editTask(task?._id)}
         >
           Edit
         </button>
         <button
           type="button"
           className={classes.historyBtn}
-          onClick={() => showTaskHistory(task._id)}
+          onClick={() => showTaskHistory(task?._id)}
         >
           History
         </button>
         <button
           type="button"
           className={classes.deleteBtn}
-          onClick={() => deleteTask(task._id)}
+          onClick={() => deleteTask(task?._id)}
         >
           Delete
         </button>

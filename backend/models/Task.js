@@ -27,6 +27,10 @@ const taskSchema = new Schema(
       ref: "User",
       required: true,
     },
+    reminder: {
+      type: Schema.Types.ObjectId,
+      ref: "Reminder",
+    },
   },
   { timestamps: true }
 );

@@ -16,7 +16,7 @@ function HistoryModal({ isOpen, closeModal, list }) {
             contentLabel="Add Task Modal"
         >
             <h1> Changes </h1>
-            <button type="button" style={{ float: 'right' }} onClick={closeModal}>X</button>
+            <button type="button" className={classes.close} onClick={closeModal}>X</button>
             {list.length > 0 ? (
                 <table className={classes.historyList_table}>
                     <tbody>

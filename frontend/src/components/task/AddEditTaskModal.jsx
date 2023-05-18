@@ -23,7 +23,7 @@ function AddEditTaskModal({
                 {' '}
                 Task
             </h1>
-            <button type="button" style={{ float: 'right' }} onClick={closeModal}>X</button>
+            <button type="button" className={classes.close} onClick={closeModal}>X</button>
             <form
                 className={classes.addNewForm}
                 onSubmit={task?.title ? updateExistingTask : addNewTask}
@@ -52,7 +52,22 @@ function AddEditTaskModal({
                         required
                         min={new Date().toISOString().substring(0, 10)}
                         onChange={handleChange}
-                        defaultValue={moment(task?.dueDate).format('YYYY-MM-DD')}
+                        defaultValue={task?.dueDate ? moment(task?.dueDate).format('YYYY-MM-DD') : undefined}
+                    />
+                </label>
+
+                <label htmlFor="remindOn">
+                    Remind On:
+                    <input
+                        name="remindOn"
+                        type="date"
+                        required
+                        min={new Date().toISOString().substring(0, 10)}
+                        max={task?.dueDate
+                            ? new Date(task?.dueDate).toISOString().substring(0, 10)
+                            : undefined}
+                        onChange={handleChange}
+                        defaultValue={task?.reminder?.remindOn ? moment(task?.reminder?.remindOn).format('YYYY-MM-DD') : undefined}
                     />
                 </label>
 

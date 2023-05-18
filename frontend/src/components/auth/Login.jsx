@@ -63,6 +63,8 @@ function Login() {
         </label>
         <br />
         <button type="submit">{isLoading ? <Spinner /> : 'Login'}</button>
+
+        <h4> Reset Password </h4>
       </form>
     </div>
   );

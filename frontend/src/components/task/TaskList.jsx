@@ -47,6 +47,7 @@ function TaskList() {
       toast.success('New task added');
       setIsAddingNewOrEditingTask(false);
       setNewTask({});
+      setExistingTask({});
       setTaskList([{ ...data }, ...taskList]);
     } catch (err) {
       console.log(err);
@@ -98,10 +99,14 @@ function TaskList() {
   };
 
   const closeModal = () => {
+    setNewTask({});
+    setExistingTask({});
     setIsAddingNewOrEditingTask(false);
   };
 
   const closeTaskHistoryModal = () => {
+    setNewTask({});
+    setExistingTask({});
     setTaskHistoryModalOpen(false);
   };
 

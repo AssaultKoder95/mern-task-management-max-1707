@@ -4,23 +4,58 @@ import Reminder from "../models/Reminder.js";
 import TaskHistory from "../models/TaskHistory.js";
 import createError from "../utils/error.js";
 
-export const createTask = async (req, res, next) => {
-  const { title, dueDate, description } = req.body;
+export const setReminder = async ({ remindOn, id }) => {
+  const existingReminder = await Reminder.find({ task: id });
 
-  const newTask = new Task({
-    title,
-    dueDate,
-    description,
-    user: req.user.id,
+  if (existingReminder?.length) {
+    return Reminder.findByIdAndUpdate(
+      { _id: existingReminder[0]._id },
+      { remindOn: new Date(remindOn).getTime() }
+    );
+  }
+
+  const newReminder = new Reminder({
+    remindOn: new Date(remindOn).getTime(),
+    task: id,
   });
+
+  return newReminder.save();
+};
+
+export const createTask = async (req, res, next) => {
+  const { title, dueDate, description, remindOn, status } = req.body;
+  let savedReminder;
+
   try {
-    const savedTask = await newTask.save();
+    const newTask = new Task({
+      title,
+      dueDate,
+      description,
+      status,
+      user: req.user.id,
+    });
+
+    let savedTask = await newTask.save();
+    console.log(savedTask);
 
     const taskHistory = new TaskHistory({
       changes: `created task - ${savedTask.title}`,
-      task: savedTask.id,
+      task: savedTask._id,
     });
     await taskHistory.save();
+
+    console.log({ savedTask, remindOn });
+
+    if (remindOn) {
+      savedReminder = await setReminder({ remindOn, id: savedTask._id });
+      savedTask = await Task.findByIdAndUpdate(
+        req.params.taskId,
+        {
+          reminder: savedReminder._id,
+        },
+        { new: true }
+      );
+    }
 
     res.status(200).json(savedTask);
   } catch (err) {
@@ -38,9 +73,9 @@ export const updateTask = async (req, res, next) => {
       return next(createError({ status: 401, message: "It's not your todo." }));
     }
 
-    const { title, dueDate, description, status } = req.body;
+    const { title, dueDate, description, status, remindOn } = req.body;
 
-    const updatedTask = await Task.findByIdAndUpdate(
+    let updatedTask = await Task.findByIdAndUpdate(
       req.params.taskId,
       {
         title: title || task.title,
@@ -57,32 +92,22 @@ export const updateTask = async (req, res, next) => {
     });
     await taskHistory.save();
 
+    let savedReminder;
+
+    console.log({ task, remindOn });
+
+    if (remindOn) {
+      savedReminder = await setReminder({ remindOn, id: task._id });
+      updatedTask = await Task.findByIdAndUpdate(
+        req.params.taskId,
+        {
+          reminder: savedReminder._id,
+        },
+        { new: true }
+      );
+    }
+
     return res.status(200).json(updatedTask);
-  } catch (err) {
-    return next(err);
-  }
-};
-
-export const setReminder = async (req, res, next) => {
-  try {
-    const task = await Task.findById(req.params.taskId).exec();
-    if (!task) {
-      return next(createError({ status: 404, message: "Task not found" }));
-    }
-    if (task.user.toString() !== req.user.id) {
-      return next(createError({ status: 401, message: "It's not your todo." }));
-    }
-
-    const { remindOn } = req.body;
-
-    const newReminder = new Reminder({
-      remindOn,
-      task: task.id,
-    });
-
-    const savedReminder = await newReminder.save();
-
-    return res.status(200).json(savedReminder);
   } catch (err) {
     return next(err);
   }
@@ -99,7 +124,8 @@ export const getAllTasks = async (req, res, next) => {
 
 export const getCurrentUserTasks = async (req, res, next) => {
   try {
-    const tasks = await Task.find({ user: req.user.id });
+    const tasks = await Task.find({ user: req.user.id }).populate("reminder");
+
     res.status(200).json(tasks);
   } catch (err) {
     next(err);

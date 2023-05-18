@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 import Task from "../models/Task.js";
 import Reminder from "../models/Reminder.js";
 import TaskHistory from "../models/TaskHistory.js";
@@ -30,10 +31,12 @@ export const createTask = async (req, res, next) => {
 export const updateTask = async (req, res, next) => {
   try {
     const task = await Task.findById(req.params.taskId).exec();
-    if (!task)
+    if (!task) {
       return next(createError({ status: 404, message: "Task not found" }));
-    if (task.user.toString() !== req.user.id)
+    }
+    if (task.user.toString() !== req.user.id) {
       return next(createError({ status: 401, message: "It's not your todo." }));
+    }
 
     const { title, dueDate, description, status } = req.body;
 
@@ -49,9 +52,9 @@ export const updateTask = async (req, res, next) => {
     );
 
     const taskHistory = new TaskHistory({
-      changes: `updated task - ${savedTask.title}. ${Object.keys(req.body).join(
-        ", "
-      )} have been updated.`,
+      changes: `updated task - ${updateTask.title}. ${Object.keys(
+        req.body
+      ).join(", ")} have been updated.`,
       task: updatedTask.id,
     });
     await taskHistory.save();
@@ -65,10 +68,12 @@ export const updateTask = async (req, res, next) => {
 export const setReminder = async (req, res, next) => {
   try {
     const task = await Task.findById(req.params.taskId).exec();
-    if (!task)
+    if (!task) {
       return next(createError({ status: 404, message: "Task not found" }));
-    if (task.user.toString() !== req.user.id)
+    }
+    if (task.user.toString() !== req.user.id) {
       return next(createError({ status: 401, message: "It's not your todo." }));
+    }
 
     const { remindOn } = req.body;
 
@@ -122,5 +127,14 @@ export const deleteAllTasks = async (req, res, next) => {
     res.json("All Todo Deleted Successfully");
   } catch (err) {
     next(err);
+  }
+};
+
+export const getTaskHistory = async (req, res, next) => {
+  try {
+    const tasks = await TaskHistory.find({ task: req.params.taskId });
+    return res.json(tasks);
+  } catch (err) {
+    return next(err);
   }
 };
